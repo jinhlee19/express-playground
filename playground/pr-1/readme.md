@@ -30,7 +30,7 @@ server: nodemon server는 서버를 재시작할 필요 없이 server라는 파�
 },
 ```
 
-# Step 2-2
+# Step 2.2.
 
 Postman에서 get request 넣기
 get request to port 5000
@@ -78,4 +78,15 @@ module.exports = connectDB;
 - error event 무시: EventEmitter#emit('error')
 - Unhandled Signals: $ kill <PROCESS_ID>
 
-# Step 4
+# Step 3.1.
+
+@ server.js
+
+```javascript
+const connectDB = require('./config/db');
+
+// Connect DB
+connectDB();
+```
+
+# Step 4 - Router
