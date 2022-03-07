@@ -5,4 +5,6 @@ const router = express.Router();
 // @desc    Test Route
 // @access  Public
 
-router.get('/', (req,res) => res.send('Auth Route'))
+router.get('/', (req,res) => res.send('Auth Route'));
+
+module.exports = router;
