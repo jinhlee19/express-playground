@@ -12,11 +12,43 @@ router.post(
     check('email', '이메일 주소를 입력해주세요.').isEmail(), 
     check('password', '비밀번호를 8자리 이상 입력해주세요.').isLength({min: 8}),
     ],
-	(req, res) => {
-		const errors = validationResult(req);
+	async (req, res) => {
+        const errors = validationResult(req);
         if (!errors.isEmpty()){
             return res.status(400).json({errors: errors.array()});
         }
+        const {name, email, password} = req.body;
+
+        try {
+            let user = await User.findOne({email});
+            if (user) {
+                return res.status(400).json({errors: [{msg:'User already ex'}]});
+            }
+            const avatar = gravatar.url(email, {
+				// default size
+				s: '200',
+				r: 'pg',
+				// default image
+				d: 'mm',
+			});
+            user = new User({
+				name,
+				email,
+				avatar,
+				password,
+			});
+            const salt = await bcrypt.genSalt(10);
+			user.password = await bcrypt.hash(password, salt);
+			await user.save();
+        } catch (err) {
+            console.log(err.message);
+            res.status(500).send('Server Error');
+        }
+
+
+       
+		
+        
 	}
 );
 

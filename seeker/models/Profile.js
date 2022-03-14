@@ -36,6 +36,10 @@ const ProfileSchema = new Schema({
 	],
 	experience: [
 		{
+			inst: {
+				type: Schema.Types.ObjectId,
+				ref: 'inst',
+			},
 			title: {
 				type: String,
 				require: true,

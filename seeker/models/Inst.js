@@ -15,19 +15,24 @@ const InstSchema = new Schema({
 	// 	type: Schema.Types.ObjectId,
 	// 	ref: 'users',
 	// },
-	// 구분: 사립사인 / 사립법인 / 공립단설 / 공립병설 
+	// 구분: 사립사인 / 사립법인 / 공립단설 / 공립병설
+	instName: {
+		type: String,
+		required: true,
+	},
+	instLogo: {
+		type: String,
+	},
 	division: {
 		type: String,
 		required: true,
 	},
-	
 	location: {
 		type: String,
 		required: true,
 	},
 	officeNumber: {
 		type: String,
-		
 	},
 	personalNumber: {
 		type: String,
@@ -36,6 +41,5 @@ const InstSchema = new Schema({
 		type: String,
 	},
 });
-
 
 module.exports = Institution = mongoose.model('user', InstSchema);
