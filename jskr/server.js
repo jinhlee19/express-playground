@@ -22,6 +22,11 @@ app.listen(PORT, ()=>{
 });
 
 /*
+19열)
+this will look for an environment variable called port to use and when we deploy to hiroku, that's where its going to get the port.
+세팅된 환경변수에 따라서 포트 변경시켜주기. 환경이 없을때 || (or) 5000포트에 배치
+--- 
 process.env는 heroku등에서 사용하기 위해서 
 dotenv 파일을 만들어서 mongoose 접속을 위한 계정, 비번을 넣어줄 수도 있다. 
+
 */
