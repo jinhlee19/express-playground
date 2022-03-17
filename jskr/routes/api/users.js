@@ -6,7 +6,7 @@ const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
-const User = require('../../models/Users');
+const User = require('../../models/User');
 
 
 //// REGISTER ROUTE 만드는 시간 ~
@@ -18,7 +18,7 @@ const User = require('../../models/Users');
 router.post(
 	'/',
 	[
-		body('name', '이름을 입력해주세요.').not().isEmpty(),
+		body('username', '이름을 입력해주세요.').not().isEmpty(),
 		body('email', '유효한 이메일을 입력해주세요.').isEmail(),
 		body('password', '6자리 이상의 비밀번호를 입력해주세요.').isLength({
 			min: 6,
@@ -30,7 +30,7 @@ router.post(
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
-		const { name, email, password } = req.body;
+		const { username, email, password } = req.body;
 		
 		try {
 			let user = await User.findOne({ email });
@@ -51,7 +51,7 @@ router.post(
 			});
 			// USER MODEL ** = 36열
 			user = new User({
-				name,
+				username,
 				email,
 				avatar,
 				password,
@@ -65,8 +65,8 @@ router.post(
 
 			res.send('user Registered');
 
-			// ****** JWT ******
-			// JWT Payload
+			// // ****** JWT ******
+			// // JWT Payload
 			// const payload = {
 			// 	user: {
 			// 		id: user.id,
