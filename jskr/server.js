@@ -1,9 +1,11 @@
 const express = require('express');
-const connectDB = require('./config/db');
 const app = express();
+// Connect DB
+const connectDB = require('./config/db');
 connectDB();
 
-// Connect DB
+// Init Middleware - bodyparser
+app.use(express.json({extended:false}));
 
 // Q) 이때, app.get 과 app.use의 차이?
 app.get('/', (req,res)=>{
