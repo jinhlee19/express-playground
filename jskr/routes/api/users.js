@@ -25,23 +25,25 @@ router.post(
 		}),
 	],
 	async (req, res) => {
+		//// VALIDATION
 		const errors = validationResult(req);
-		// validationResult는 req로 넘어오는 값으로 body()의 유효성을 검증 후, 에러 발생시 배열로 반환
+		// ValidationResult()는 req로 넘어오는 값으로 body()의 유효성을 검증 후, 에러 발생시 배열로 반환한다. 
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
+		//// REGISTER
 		const { username, email, password } = req.body;
 		
 		try {
+			// 아이디 등록여부 확인
 			let user = await User.findOne({ email });
 			if (user) {
 				// console.log(user);
 				return res
-					.status(400)
-					.json({ error: [{ msg: '이미 등록된 이메일입니다.' }] });
+				.status(400)
+				.json({ error: [{ msg: '이미 등록된 이메일입니다.' }] });
 			}
-			////  ****** 여기서부터 아바타, bcrypt, JWT
-			// Avatar
+			// 그라바타
 			const avatar = gravatar.url(email, {
 				// default size
 				s: '200',
@@ -49,7 +51,7 @@ router.post(
 				// default image
 				d: 'mm',
 			});
-			// USER MODEL ** = 36열
+			// 유저 모델 (스키마를 통한 인스턴스화)
 			user = new User({
 				username,
 				email,
@@ -57,30 +59,40 @@ router.post(
 				password,
 			});
 
-			// Bcrypt - bcrypt.genSalt는 promise를 반환함. 모든 promise를 반환하는 것들에 await을 붙인다.
+			// 비밀번호 암호화 - Bcrypt
+
+			// Bcrypt의 genSalt, hash 등의 메서드는 promise를 반환한다. -> 모든 promise를 반환하는 것들에 await을 붙인다.
 			const salt = await bcrypt.genSalt(10);
 			user.password = await bcrypt.hash(password, salt);
-			// user를 DB에 저장 / REGISTER . - .save()도 promise 반환.
+
+			
+			// USER를 DATABASE에 등록 - REGISTER 
+			// Mongoose .save()도 promise 반환.
 			await user.save();
 
-			res.send('user Registered');
+			// // (임시 출력)
+			// res.send('user Registered');
 
-			// // ****** JWT ******
-			// // JWT Payload
-			// const payload = {
-			// 	user: {
-			// 		id: user.id,
-			// 	},
-			// };
-			// jwt.sign(
-			// 	payload,
-			// 	config.get('jwtSecret'),
-			// 	{ expiresIn: 360000 },
-			// 	(err, token) => {
-			// 		if (err) throw err;
-			// 		res.json({ token });
-			// 	}
-			// );
+			
+			// JWT Payload
+			const payload = {
+				user: {
+					id: user.id,
+				},
+			};
+			// JWT sign -> payload 
+			// 1. Register a User 이후에 생성된 웹토큰을 돌려받는다. 
+			// 2. 돌려받은 웹 토큰으로 다시 인증auth와 보호된 route의 access를 위해 전송한다. 
+			jwt.sign(
+				payload,
+				config.get('jwtSecret'),
+				// 나중에 시간 바꿀 것! 3600 = 1 hr
+				{ expiresIn: 360000 },
+				(err, token) => {
+					if (err) throw err;
+					res.json({ token });
+				}
+			);
 		} catch (err) {
 			console.error(err.message);
 			res.status(500).send('서버 오류');

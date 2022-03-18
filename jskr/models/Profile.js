@@ -1,10 +1,105 @@
 const mongoose = require('mongoose');
 const ProfileSchema = new mongoose.Schema({
-    // 이때 모든 프로파일은 유저와 연결되므로 user model로 향하는 레퍼런스를 만들어줘야한다. 
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        //  Q) 이걸 출력해서 볼수 있을까?
-        ref: 'user'
-    },
-    
+	user: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'user',
+	},
+	status: {
+		type: String,
+	},
+	charge: {
+		type: String,
+	},
+	part: {
+		type: String,
+		required: true,
+	},
+	careerTotalPeriod: {
+		type: String,
+		required: true,
+	},
+	// 계산식으로 experience 부분에서 받아올것.
+	experience: [
+		{
+			title: {
+				type: String,
+				required: true,
+			},
+			company: {
+				type: String,
+				required: true,
+			},
+			location: {
+				type: String,
+			},
+			from: {
+				type: Date,
+				required: true,
+			},
+			to: {
+				type: Date,
+			},
+			period: {
+				type: Boolean,
+				default: false,
+			},
+			description: {
+				type: String,
+			},
+		},
+	],
+	education: [
+		{
+			school: {
+				type: String,
+				required: true,
+			},
+			degree: {
+				type: String,
+			},
+			major: {
+				type: String,
+				required: true,
+			},
+			from: {
+				type: Date,
+				required: true,
+			},
+			to: {
+				type: Date,
+			},
+			current: {
+				type: Boolean,
+				default: false,
+			},
+			description: {
+				type: String,
+			},
+		},
+	],
+	certificates: [
+		{
+			date: {
+				type: Date,
+				required: true,
+			},
+			name: {
+				type: Date,
+				required: true,
+			},
+			issuedBy: {
+				type: String,
+				required: true,
+			},
+		},
+	],
+	bio: {
+		type: String,
+	},
+	date: {
+		type: Date,
+		default: Date.now,
+	},
 });
+
+module.exports = Profile = mongoose.model('profile', ProfileSchema);
