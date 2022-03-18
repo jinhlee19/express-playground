@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
 		type: String,
 		require: true,
 	},
-	fullname: { type: String, require: true },
+	fullname: { type: String },
 	residence: {
 		type: String,
 		require: true,

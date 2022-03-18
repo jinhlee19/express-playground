@@ -13,6 +13,7 @@ const ProfileSchema = new mongoose.Schema({
 	part: {
 		// 강사, 교사, 시간강사 등에서 선택
 		type: [String],
+		
 		required: true,
 	},
 	careerTotalPeriod: {
