@@ -2,11 +2,14 @@ const express = require('express');
 const router = express.Router();
 const auth = require('../../middleware/auth');
 const User = require('../../models/User');
+
 // 로그인에서 사용
 const config = require('config');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
+
+
 //// 웹토큰으로 사용자 인증
 
 // @ Route      Get api/auth
@@ -49,7 +52,7 @@ router.post(
 		
 		try {
 			
-			// 아이디 등록여부 확인
+			// 사용자 아이디(이메일) 확인
 			let user = await User.findOne({ email });
 			if (!user) {
 				// console.log(user);
@@ -58,7 +61,7 @@ router.post(
 				.json({ error: [{ msg: '사용자 정보가 일치하지 않습니다.' }] });
 			}
 
-			// 비밀번호 일치
+			// 비밀번호 매칭 확인
 			const isMatch = await bcrypt.compare(password, user.password);
 			if(!isMatch) {
 				return res
@@ -89,4 +92,4 @@ router.post(
 	}
 );
 
-module.exports = router;
+
