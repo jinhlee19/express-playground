@@ -82,7 +82,7 @@ router.post(
 			};
 			// JWT sign -> payload 
 			// 1. Register a User 이후에 생성된 웹토큰을 돌려받는다. 
-			// 2. 돌려받은 웹 토큰으로 다시 인증auth와 보호된 route의 access를 위해 전송한다. 
+			// 2. 돌려받은 웹 토큰으로 다시 인증auth와 보호된 route의 access를 위해 전송한다. (middleware)
 			jwt.sign(
 				payload,
 				config.get('jwtSecret'),
