@@ -87,7 +87,7 @@ router.post(
 				payload,
 				config.get('jwtSecret'),
 				// 나중에 시간 바꿀 것! 3600 = 1 hr
-				{ expiresIn: 360000 },
+				{ expiresIn: 3600000 },
 				(err, token) => {
 					if (err) throw err;
 					res.json({ token });
