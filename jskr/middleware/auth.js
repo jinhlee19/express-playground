@@ -8,7 +8,7 @@ module.exports = function (req, res, next) {
 	if (!token) {
 		return res
 			.status(401)
-			.json({ msg: '토큰이 없습니다.' });
+			.json({ msg: '인증정보가 없습니다.' });
 	}
 	// 토큰 인증 - Verify Token
 	try {
@@ -16,7 +16,7 @@ module.exports = function (req, res, next) {
 		req.user = decode.user;
         next();
 	} catch (err) {
-		res.status(401).json({ msg: '토큰이 유효하지 않습니다.' });
+		res.status(401).json({ msg: '인증정보가 유효하지 않습니다.' });
 	}
 };
 
