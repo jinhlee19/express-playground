@@ -9,7 +9,6 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 
-
 //// 웹토큰으로 사용자 인증
 
 // @ Route      Get api/auth
@@ -40,33 +39,31 @@ router.post(
 		body('password', '비밀번호를 입력해주세요.').exists(),
 	],
 	async (req, res) => {
-		
 		//// Body의 에러 확인
 		const errors = validationResult(req);
 		if (!errors.isEmpty()) {
 			return res.status(400).json({ errors: errors.array() });
 		}
-		
+
 		//// 이메일과 비밀번호로 로그인
 		const { email, password } = req.body;
-		
+
 		try {
-			
 			// 사용자 아이디(이메일) 확인
 			let user = await User.findOne({ email });
 			if (!user) {
 				// console.log(user);
 				return res
-				.status(400)
-				.json({ error: [{ msg: '사용자 정보가 일치하지 않습니다.' }] });
+					.status(400)
+					.json({ error: [{ msg: '사용자 정보가 일치하지 않습니다.' }] });
 			}
 
 			// 비밀번호 매칭 확인
 			const isMatch = await bcrypt.compare(password, user.password);
-			if(!isMatch) {
+			if (!isMatch) {
 				return res
-				.status(400)
-				.json({ error: [{ msg: '사용자 정보가 일치하지 않습니다.' }] });
+					.status(400)
+					.json({ error: [{ msg: '사용자 정보가 일치하지 않습니다.' }] });
 			}
 
 			// JWT Payload

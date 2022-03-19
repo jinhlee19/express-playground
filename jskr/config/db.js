@@ -6,7 +6,7 @@ const db = config.get('mongoURI');
 const connectDB = async () => {
 	try {
 		// await mongoose.connect(db);
-        // 대신 new url파서를 사용하기 위해 설정. 아니면 deprecation warning걸림.
+		// 대신 new url파서를 사용하기 위해 설정. 아니면 deprecation warning걸림.
 		await mongoose.connect(db, { useNewUrlParser: true });
 		console.log('mongoDB connected.');
 	} catch (err) {

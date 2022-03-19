@@ -51,8 +51,17 @@ router.post(
 		}
 
 		// validation passes
-		const { status, company, charge, roles, bio, title, location, description} = req.body;
-		// DB에 입력을 위한 프로필 필드 만들기. Build project object 
+		const {
+			status,
+			company,
+			charge,
+			roles,
+			bio,
+			title,
+			location,
+			description,
+		} = req.body;
+		// DB에 입력을 위한 프로필 필드 만들기. Build project object
 		const profileFields = {};
 		profileFields.user = req.user.id;
 		if (status) profileFields.status;
@@ -77,7 +86,7 @@ router.post(
 			if (profile) {
 				// 업데이트 ***
 				profile = await Profile.findOneAndUpdate(
-					{ user: req.user.id }, 
+					{ user: req.user.id },
 					// user not defined 문제 해결함. typo
 					{ $set: profileFields },
 					{ new: true }

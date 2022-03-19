@@ -16,30 +16,26 @@ const ProfileSchema = new mongoose.Schema({
 	roles: {
 		// 강사, 교사, 시간강사 등에서 선택
 		type: [String],
-		
+
 		required: true,
 	},
 	career: {
 		type: String,
-		
 	},
 	// 계산식으로 experience 부분에서 받아올것.
 	experience: [
 		{
 			title: {
 				type: String,
-			
 			},
 			company: {
 				type: String,
-		
 			},
 			location: {
 				type: String,
 			},
 			from: {
 				type: Date,
-			
 			},
 			to: {
 				type: Date,

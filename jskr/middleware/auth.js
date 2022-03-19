@@ -6,15 +6,13 @@ module.exports = function (req, res, next) {
 	const token = req.header('x-auth-token');
 	// 토큰 여부 확인 Check if no Token
 	if (!token) {
-		return res
-			.status(401)
-			.json({ msg: '인증정보가 없습니다.' });
+		return res.status(401).json({ msg: '인증정보가 없습니다.' });
 	}
 	// 토큰 인증 - Verify Token
 	try {
 		const decode = jwt.verify(token, config.get('jwtSecret'));
 		req.user = decode.user;
-        next();
+		next();
 	} catch (err) {
 		res.status(401).json({ msg: '인증정보가 유효하지 않습니다.' });
 	}
