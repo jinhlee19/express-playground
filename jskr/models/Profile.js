@@ -13,7 +13,7 @@ const ProfileSchema = new mongoose.Schema({
 	charge: {
 		type: String,
 	},
-	role: {
+	roles: {
 		// 강사, 교사, 시간강사 등에서 선택
 		type: [String],
 		
@@ -21,25 +21,25 @@ const ProfileSchema = new mongoose.Schema({
 	},
 	career: {
 		type: String,
-		required: true,
+		
 	},
 	// 계산식으로 experience 부분에서 받아올것.
 	experience: [
 		{
 			title: {
 				type: String,
-				required: true,
+			
 			},
 			company: {
 				type: String,
-				required: true,
+		
 			},
 			location: {
 				type: String,
 			},
 			from: {
 				type: Date,
-				required: true,
+			
 			},
 			to: {
 				type: Date,

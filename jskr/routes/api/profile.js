@@ -42,38 +42,55 @@ module.exports = router;
 
 router.post(
 	'/',
-	[
-		auth,
-		[
-			body('roles', '업무 분야를 입력해주세요.').not().isEmpty(),
-		],
-	],
+	[auth, [body('roles', '업무 분야를 입력해주세요.').not().isEmpty()]],
 	async (req, res) => {
 		const errors = validationResult(req);
 		// validation not pass
-		if (!errors.isEmpty()){
-			return res.status(400).json({errors: errors.array()});
+		if (!errors.isEmpty()) {
+			return res.status(400).json({ errors: errors.array() });
 		}
-		// validation passes
-		const { 
-			status,
-			company,
-			charge,
-			roles,
-			bio,
-		} = req.body;
 
-		// Build project object
+		// validation passes
+		const { status, company, charge, roles, bio, title, location, description} = req.body;
+		// DB에 입력을 위한 프로필 필드 만들기. Build project object 
 		const profileFields = {};
 		profileFields.user = req.user.id;
-		if(status) profileFields.status;
-		if(company) profileFields.company;
-		if(charge) profileFields.charge;
-		if(bio) profileFields.bio;
+		if (status) profileFields.status;
+		if (company) profileFields.company;
+		if (charge) profileFields.charge;
+		if (bio) profileFields.bio;
 		// (Array type)
-		if(roles) profileFields.roles = roles.split(',').map(role => role.trim());
-		//test
-		console.log(profileFields.roles);
-		res.send('Hello');
+		if (roles) profileFields.roles = roles.split(',').map(role => role.trim());
+		// Test Point
+		// console.log(profileFields.roles);
+		// res.send('Hello');
+		profileFields.experience = {};
+		if (title) profileFields.experience.title = title;
+		if (company) profileFields.experience.company = company;
+		if (location) profileFields.experience.location = location;
+		if (description) profileFields.experience.description = description;
+		try {
+			let profile = await Profile.findOne({ user: req.user.id });
+			// user field is objectId 이므로...
+			// console.log(req.user.id);
+			// console.log(user.id);
+			if (profile) {
+				// 업데이트 ***
+				profile = await Profile.findOneAndUpdate(
+					{ user: req.user.id }, 
+					// user not defined 문제 해결함. typo
+					{ $set: profileFields },
+					{ new: true }
+				);
+				return res.json(profile);
+			}
+			// 생성 - 기존 프로필이 없으므로.
+			profile = new Profile(profileFields);
+			await profile.save();
+			res.json(profile);
+		} catch (err) {
+			console.error(err.message);
+			res.status(500).send('프로필 생성 / 업데이트 서버 오류');
+		}
 	}
 );
