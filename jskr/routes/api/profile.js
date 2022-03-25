@@ -103,8 +103,31 @@ router.post(
 		}
 	}
 );
+//// 경력 추가
+// @route   PUT api/profile/:exp_id
+// @desc    유저 경력 추가
+// @access  Private
+router.put(
+	'/experience',
+	[body('title', '직책을 입력해주세요.').not().isEmpty()],
+	(req, res) => {
+		const error = validationResult(req);
+		if (!error.isEmpty()) {
+			return res.status(400).json({ errors: error.array() });
+		}
+		const { title, company, location, from, to, current, description } =
+			req.body;
+		const newExp = { title, company, location, from, to, current, description };
+		try {
+			const profile = Profile.findOne({ user: req.user.id });
+		} catch (err) {
+			console.error(err.message);
+			res.status(500).send('서버 오류');
+		}
+	}
+);
 
-// 경력 삭제
+//// 경력 삭제
 // @route   Delete api/profile/:exp_id
 // @desc    유저 경력 삭제
 // @access  Private
