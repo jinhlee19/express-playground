@@ -35,7 +35,6 @@ router.get('/me', auth, async (req, res) => {
 module.exports = router;
 
 //// 유저 프로필 생성
-
 // @route   Post api/profile
 // @desc    Create or update user profile
 // @access  Private
@@ -103,6 +102,23 @@ router.post(
 		}
 	}
 );
+
+//// 유저 프로필 삭제
+// @route   DELETE api/profile/:user_id
+// @desc    유저 경력 추가
+// @access  Private
+
+router.delete('/', auth, async (req, res) => {
+	try {
+		await Profile.findOneAndRemove({ user: req.user.id });
+		await User.findOneAndRemove({ _id: req.user.id });
+		res.json({ msg: '사용자 계정이 삭제처리 되었습니다.' });
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send('서버 오류');
+	}
+});
+
 //// 경력 추가
 // @route   PUT api/profile/:exp_id
 // @desc    유저 경력 추가
@@ -110,7 +126,7 @@ router.post(
 router.put(
 	'/experience',
 	[body('title', '직책을 입력해주세요.').not().isEmpty()],
-	(req, res) => {
+	async (req, res) => {
 		const error = validationResult(req);
 		if (!error.isEmpty()) {
 			return res.status(400).json({ errors: error.array() });
@@ -120,6 +136,9 @@ router.put(
 		const newExp = { title, company, location, from, to, current, description };
 		try {
 			const profile = Profile.findOne({ user: req.user.id });
+			profile.experience.unshift(newExp);
+			await profile.save();
+			res.json(profile);
 		} catch (err) {
 			console.error(err.message);
 			res.status(500).send('서버 오류');
@@ -132,14 +151,14 @@ router.put(
 // @desc    유저 경력 삭제
 // @access  Private
 
-router.delete('/experience/:exp_id', auth, (req, res) => {
+router.delete('/experience/:exp_id', auth, async (req, res) => {
 	try {
 		const profile = Profile.findOne({ user: req.user.id });
 		const removeIndex = profile.experience
 			.map(item => item.id)
 			.indexOf(req.params.exp_id);
 		profile.experience.splice(removeIndex, 1);
-		profile.save();
+		await profile.save();
 		res.json(profile);
 	} catch (err) {
 		console.error(err.message);
