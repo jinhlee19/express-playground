@@ -12,7 +12,7 @@ const { body, validationResult } = require('express-validator');
 // @ Access     Private
 
 // (api/profile은 전체, api/profile/me 는 id일치)
-
+// 이때 auth 가 미들웨어
 router.get('/me', auth, async (req, res) => {
 	try {
 		// mongoose method findOne
@@ -103,3 +103,23 @@ router.post(
 		}
 	}
 );
+
+// 경력 삭제
+// @route   Delete api/profile/:exp_id
+// @desc    유저 경력 삭제
+// @access  Private
+
+router.delete('/experience/:exp_id', auth, (req, res) => {
+	try {
+		const profile = Profile.findOne({ user: req.user.id });
+		const removeIndex = profile.experience
+			.map(item => item.id)
+			.indexOf(req.params.exp_id);
+		profile.experience.splice(removeIndex, 1);
+		profile.save();
+		res.json(profile);
+	} catch (err) {
+		console.error(err.message);
+		res.status(500).send('서버 오류');
+	}
+});

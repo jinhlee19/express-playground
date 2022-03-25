@@ -10,7 +10,7 @@ const ProfileSchema = new mongoose.Schema({
 	company: {
 		type: String,
 	},
-	charge: {
+	jobtitle: {
 		type: String,
 	},
 	roles: {
@@ -19,7 +19,7 @@ const ProfileSchema = new mongoose.Schema({
 
 		required: true,
 	},
-	career: {
+	careerPeriod: {
 		type: String,
 	},
 	// 계산식으로 experience 부분에서 받아올것.
