@@ -1,4 +1,8 @@
 // 네비게이션 바
+
+import React from 'react';
+import { Link } from 'react-router-dom';
+
 const Navbar = () => {
 	return (
 		<nav className="max-w-screen-lg flex justify-between space-y-2 pt-4 pb-2 px-4 border-b-[1px]">
@@ -17,10 +21,10 @@ const Navbar = () => {
 					<nav className="flex items-center">
 						{/* <span className="border-l-2 border-amber-300 h-4 mr-8"></span> */}
 						<ul className="flex justify-between text-md items-center space-x-6 pr-12">
-							<li>기관</li>
-							<li>구직</li>
-							<li>기업</li>
-							<li>서비스</li>
+							<li><Link to='#'>기관</Link></li>
+							<li><Link to='#'>구직</Link></li>
+							<li><Link to='#'>기업</Link></li>
+							<li><Link to='#'>서비스</Link></li>
 						</ul>
 					</nav>
 				</div>
