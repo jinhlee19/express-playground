@@ -2,8 +2,7 @@ import React from 'react';
 
 const Landing = () => {
 	return (
-		<div className="">
-			<h1 className="text-4xl font-semibold">하이</h1>
+		<div className="max-w-screen-xl mx-auto space-y-2 mt-6">
 		</div>
 	);
 };
