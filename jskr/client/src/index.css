@@ -12,3 +12,7 @@
 @tailwind utilities;
 @layer components {
 }
+
+/* .heading-top{
+	background: url('./img/header-bg-1.jpg') no-repeat center center/cover;
+} */
